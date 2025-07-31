@@ -26,7 +26,7 @@ def display_banner():
     banner = "[bold red]Made By[/bold red] SAMYAK KATIYAR"
     #print(Panel(title))
     print(Panel(banner, subtitle="Token Exploiter | Decoder | Brute-Forcer"))
-    print(f"\nToken: {token}\nsecret: {secret_value}\nURL: {target_url}\n")
+    print(f"\nToken: {config.token}\nsecret: {config.secret_value}\nURL: {config.target_url}\n")
 
 
 def display_menu(): 
@@ -177,27 +177,22 @@ def encode_dict_to_base64_string(dict):
 
 
 def update_token(header, payload, signature): # Update the global token 
-    global token
-    
     header_b64 =  encode_dict_to_base64_string(header)
     payload_b64 =  encode_dict_to_base64_string(payload)
     
-    token = '.'.join([header_b64.rstrip('='), payload_b64.strip('='), signature])
+    config.token = '.'.join([header_b64.rstrip('='), payload_b64.strip('='), signature])
 
 
 def forge_jwt(header, payload):
-    global secret_value
-    global token
-
-    if secret_value == "":
-        secret_value = take_user_input("Enter the known secret or press Enter to go back: ")
-        if secret_value == "":
+    if config.secret_value == "":
+        config.secret_value = take_user_input("Enter the known secret or press Enter to go back: ")
+        if config.secret_value == "":
             return
 
-    token = jwt.encode(payload, secret_value, algorithm="HS256", headers=header)
-    print(f"The new token: {token}")
+    config.token = jwt.encode(payload, config.secret_value, algorithm="HS256", headers=header)
+    print(f"The new token: {config.token}")
 
-    signature = token.split(".")[2]
+    signature = config.token.split(".")[2]
 
     return signature    
 
@@ -228,23 +223,20 @@ def bruteforce_jwt_for_secrets(user_input): #only expect '1' or '2' here
 
 
 def main():
-    global token
-    global secret_value
-    global target_url
-
+    
     while True: # loop to get a valid token
         clear()
         display_banner()
         
-        token = take_user_input("Enter a valid JWT Token: ")
-        header, payload, signature, result = process_jwt(token) #returns dict data type json.loads() used
+        config.token = take_user_input("Enter a valid JWT Token: ")
+        header, payload, signature, result = process_jwt(config.token) #returns dict data type json.loads() used
         if (result):
             print("valid Token")
             break
         else:
             take_user_input("\n\nPress Enter to use continue..")
             
-    while True: #loop to remove to token input by user and take input for menu
+    while True: #loop to remove to config.token input by user and take input for menu
         clear()
         display_banner()
         display_menu()
@@ -258,14 +250,14 @@ def main():
         user_input = int(user_input_chr)
 
         match user_input:
-            case 1: # decode token
+            case 1: # decode config.token
                 show_decoded_token(header, payload, signature)
             case 2: # Enter URL
-                #target_url = take_user_input("Enter URL to be tested against: ")
-                target_url = get_url_from_user()
-            case 3: # Edit token
+                #config.target_url = take_user_input("Enter URL to be tested against: ")
+                config.target_url = get_url_from_user()
+            case 3: # Edit config.token
                 header, payload, signature = edit_token(header, payload, signature)
-                #update token here
+                #update config.token here
                 update_token(header, payload, signature)
             case 4: # Forge Token
                 print("coming soon")
@@ -291,8 +283,8 @@ def main():
                     else:
                         bruteforce_jwt_for_secrets(user_input)
             case 8:
-                secret_value = take_user_input("Enter the secret value: ")
-                # verify and forge the token
+                config.secret_value = take_user_input("Enter the secret value: ")
+                # verify and forge the config.token
             case 0:
                 print("Good Bye..")
                 exit()
