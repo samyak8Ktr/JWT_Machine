@@ -1,5 +1,6 @@
 from JWT_machine import take_user_input, get_url_from_user, clear, display_banner
 import requests
+import config
 
 
 def make_a_web_request():

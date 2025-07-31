@@ -14,6 +14,8 @@ from rich.panel import Panel
 
 
 # Global Variables here:
+required_arguments = 1
+number_of_options = 8
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -223,7 +225,7 @@ def bruteforce_jwt_for_secrets(user_input): #only expect '1' or '2' here
 
 
 def main():
-    
+
     while True: # loop to get a valid token
         clear()
         display_banner()
