@@ -5,18 +5,15 @@ import jwt
 import json
 import binascii
 import base64
+import re
+import config
+import attacking_url
 import pyfiglet
 from rich import print
 from rich.panel import Panel
 
 
 # Global Variables here:
-required_arguments = 1
-number_of_options = 8
-target_url = ""
-secret_value = ""
-token = ""
-
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -94,6 +91,22 @@ def show_decoded_token(header, payload, signature):
     print(f"\nSignature: {signature}")
 
 
+def get_url_from_user():
+    pattern = r"^https?://(?:[a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3})(?:/[^\s?]*)?(?:\?[^\s]*)?$"
+
+    while True:
+        clear()
+        display_banner()
+        url = input("Enter the target URL or press Enter to go back: ")
+        if url == "":
+            return ""
+        else:
+            if re.match(pattern, url):
+                return url
+            else:
+                take_user_input("Enter a valid URL..\nPress Enter to continue")
+
+
 def display_edit_token_banner():
     print("===================")
     print("[1] Edit the header")
@@ -163,7 +176,7 @@ def encode_dict_to_base64_string(dict):
     return b64_str
 
 
-def update_token(header, payload, signature):
+def update_token(header, payload, signature): # Update the global token 
     global token
     
     header_b64 =  encode_dict_to_base64_string(header)
@@ -172,12 +185,29 @@ def update_token(header, payload, signature):
     token = '.'.join([header_b64.rstrip('='), payload_b64.strip('='), signature])
 
 
-def no_signature_verification_attack(): #I will place this in attacking_url.py
-    print("checking for no signature verification attack")
+def forge_jwt(header, payload):
+    global secret_value
+    global token
+
+    if secret_value == "":
+        secret_value = take_user_input("Enter the known secret or press Enter to go back: ")
+        if secret_value == "":
+            return
+
+    token = jwt.encode(payload, secret_value, algorithm="HS256", headers=header)
+    print(f"The new token: {token}")
+
+    signature = token.split(".")[2]
+
+    return signature    
 
 
-def downgrade_attack(): # I will plcae this in attacking_url.py
-    print("checking for downgrade attack")
+# def no_signature_verification_attack(): #I will place this in attacking_url.py
+#     print("checking for no signature verification attack")
+
+
+# def downgrade_attack(): # I will plcae this in attacking_url.py
+#     print("checking for downgrade attack")
 
 
 def display_bruteforce_banner():
@@ -231,25 +261,20 @@ def main():
             case 1: # decode token
                 show_decoded_token(header, payload, signature)
             case 2: # Enter URL
-                target_url = take_user_input("Enter URL to be tested against: ")
+                #target_url = take_user_input("Enter URL to be tested against: ")
+                target_url = get_url_from_user()
             case 3: # Edit token
                 header, payload, signature = edit_token(header, payload, signature)
                 #update token here
                 update_token(header, payload, signature)
             case 4: # Forge Token
                 print("coming soon")
-                forge_jwt(header, payload, secret_value)
+                signature = forge_jwt(header, payload)
                 update_token(header, payload, signature)
-            case 5:
-                if target_url != "":
-                    print(f"The target url is: {target_url}")
-                else:
-                    target_url = take_user_input("Enter URL to be tested against: ")
-            case 6:
-                if target_url != "":
-                    print(f"The target url is: {target_url}")
-                else:
-                    target_url = take_user_input("Enter URL to be tested against: ")
+            case 5: # not verifying
+                attacking_url.no_signature_verification_attack()
+            case 6: # downgrade attack
+                attacking_url.downgrade_attack()
             case 7:
                 while True: # Loop to take valid option
                     clear()
