@@ -17,6 +17,7 @@ from rich.panel import Panel
 required_arguments = 1
 number_of_options = 8
 
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -94,7 +95,7 @@ def show_decoded_token(header, payload, signature):
 
 
 def get_url_from_user():
-    pattern = r"^https?://(?:[a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3})(?:/[^\s?]*)?(?:\?[^\s]*)?$"
+    #pattern = r"^https?://(?:[a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3})(?:/[^\s?]*)?(?:\?[^\s]*)?$"
 
     while True:
         clear()
@@ -102,11 +103,12 @@ def get_url_from_user():
         url = input("Enter the target URL or press Enter to go back: ")
         if url == "":
             return ""
-        else:
-            if re.match(pattern, url):
-                return url
-            else:
-                take_user_input("Enter a valid URL..\nPress Enter to continue")
+        # else:
+        #     if re.match(pattern, url):
+        #         return url
+        #     else:
+        #         take_user_input("Enter a valid URL..\nPress Enter to continue")
+        return url
 
 
 def display_edit_token_banner():
