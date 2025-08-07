@@ -8,6 +8,7 @@ import base64
 import re
 import config
 import attacking_url
+import multiprocessing_bruteforce
 import pyfiglet
 from rich import print
 from rich.panel import Panel
@@ -213,7 +214,7 @@ def display_bruteforce_banner():
     print("===================")
     print("[1] Use the default wordlist")
     print("[2] Provide another wordlist")
-    print("[3] Go Back")
+    print("[0] Go Back")
     print("===================")
 
 
@@ -221,8 +222,11 @@ def bruteforce_jwt_for_secrets(user_input): #only expect '1' or '2' here
     if user_input == '1':
         print("Bruteforcing JWT fot secrets")
         #Using default wl
-    else:
-        take_user_input("Enter the custom wordlist path")
+        multiprocessing_bruteforce.bruteforce_the_jwt()
+    elif 2
+        wordlist_new = take_user_input("Enter the custom wordlist path")
+        config.wordlist = wordlist_new
+        multiprocessing_bruteforce.bruteforce_the_jwt
         #Using a custom wordlist
 
 

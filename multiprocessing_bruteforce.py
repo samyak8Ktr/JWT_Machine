@@ -3,7 +3,7 @@ import multiprocessing
 import config
 
 # --- Hardcoded values ---
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MSwiYXVkIjoiYXBwQiJ9.65p5LcnatdJct3NuuJgI9STNAB3UipZK91sQzU1m1ww"
+#token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MSwiYXVkIjoiYXBwQiJ9.65p5LcnatdJct3NuuJgI9STNAB3UipZK91sQzU1m1ww"
 # secret = "secret"  # The weak secret we're testing
 
 
@@ -15,7 +15,7 @@ def split_into_chunks(lines, num_chunks):
 def check_the_token(wordlist, result_queue):
     for word in wordlist:
         try:
-            decoded = jwt.decode(token, word, algorithms=["HS256"], options={
+            decoded = jwt.decode(config.token, word, algorithms=["HS256"], options={
 	        "verify_aud": False,
 	        "verify_iss": False,
 	        "verify_exp": False,
@@ -70,10 +70,12 @@ def bruteforce_the_jwt():
         p.join()
 
     if found:
-        print("Secret Found:", found.strip())
+        config.secret_value = found.strip()
+        print("Secret Found:", config.secret_value)
+        input("press Enter to continue..")
     else:
         print("Secret not found.")
 
 
-if __name__ == "__main__":
-    bruteforce_the_jwt()
+# if __name__ == "__main__":
+#     bruteforce_the_jwt()
