@@ -223,7 +223,7 @@ def bruteforce_jwt_for_secrets(user_input): #only expect '1' or '2' here
         print("Bruteforcing JWT fot secrets")
         #Using default wl
         multiprocessing_bruteforce.bruteforce_the_jwt()
-    elif 2
+    else:
         wordlist_new = take_user_input("Enter the custom wordlist path")
         config.wordlist = wordlist_new
         multiprocessing_bruteforce.bruteforce_the_jwt
