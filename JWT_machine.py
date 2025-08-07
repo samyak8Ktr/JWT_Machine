@@ -29,7 +29,7 @@ def display_banner():
     banner = "[bold red]Made By[/bold red] SAMYAK KATIYAR"
     #print(Panel(title))
     print(Panel(banner, subtitle="Token Exploiter | Decoder | Brute-Forcer"))
-    print(f"\nToken: {config.token}\nsecret: {config.secret_value}\nURL: {config.target_url}\n")
+    print(f"\n[yellow]Token:[/yellow] {config.token}\n[yellow]secret:[/yellow] {config.secret_value}\n[yellow]URL:[/yellow] {config.target_url}\n")
 
 
 def display_menu(): 
