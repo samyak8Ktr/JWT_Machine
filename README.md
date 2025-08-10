@@ -3,6 +3,8 @@
 **JWT Machine** is a penetration testing utility designed to simplify the process of decoding, modifying, re-signing, and testing JSON Web Tokens (JWTs) against web applications.  
 It streamlines common JWT attack vectors and saves time for security researchers who would otherwise perform these steps manually.
 
+I am still working on the networking part of this project, particulary dealing with diffrent behavious of web applications and how they accept JWT so that part is still in development.
+
 ---
 
 ## ⚠️ Warning & Ethical Use
