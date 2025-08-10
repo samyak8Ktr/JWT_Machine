@@ -37,7 +37,7 @@ You are solely responsible for your actions when using JWT Machine.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/jwt-machine.git
+git clone https://github.com/samyak8Ktr/JWT_Machine.git
 cd jwt-machine
 ```
 
