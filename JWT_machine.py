@@ -6,17 +6,19 @@ import json
 import binascii
 import base64
 import re
-import config
-import attacking_url
-import multiprocessing_bruteforce
 import pyfiglet
 from rich import print
 from rich.panel import Panel
 
+# JWT machine's custom python code files
+import config
+import attacking_url
+import multiprocessing_bruteforce
+
 
 # Global Variables here:
 required_arguments = 1
-number_of_options = 8
+number_of_options = 10
 
 
 def clear():
@@ -34,7 +36,7 @@ def display_banner():
 
 
 def display_menu(): 
-    print("===================")
+    print("=========================================================")
     print("[1] Decode Token")
     print("[2] Enter / Change the URL to be tested for")
     print("[3] Manually edit the token")
@@ -43,14 +45,15 @@ def display_menu():
     print("[6] Check for downgrade attack")
     print("[7] Bruteforce to check for weak symmetric secrets")
     print("[8] Enter the secret if already known")
+    print("[9] Send a custom web request to the URL")
     print("[0] Exit")
-    print("===================")
+    print("=========================================================")
 
 
 def take_user_input(display_line):
     try:
         user_input = input(display_line)
-        return user_input
+        return user_input.strip()
     except KeyboardInterrupt:
         print("\nGood Bye..")
         exit()
@@ -113,12 +116,12 @@ def get_url_from_user():
 
 
 def display_edit_token_banner():
-    print("===================")
+    print("=========================================================")
     print("[1] Edit the header")
     print("[2] Edit the playload")
     print("[3] Edit the signature")
     print("[0] to go back")
-    print("===================")
+    print("=========================================================")
 
 
 def edit_token(header, payload, signature): #only expects 'header' or 'payload'
@@ -211,16 +214,16 @@ def forge_jwt(header, payload):
 
 
 def display_bruteforce_banner():
-    print("===================")
+    print("=========================================================")
     print("[1] Use the default wordlist")
     print("[2] Provide another wordlist")
     print("[0] Go Back")
-    print("===================")
+    print("=========================================================")
 
 
 def bruteforce_jwt_for_secrets(user_input): #only expect '1' or '2' here
     if user_input == '1':
-        print("Bruteforcing JWT fot secrets")
+        print("[+] Bruteforcing JWT for secrets")
         #Using default wl
         multiprocessing_bruteforce.bruteforce_the_jwt()
     else:
@@ -250,7 +253,7 @@ def main():
         display_menu()
         user_input_chr = take_user_input("Select an Option: ")
 
-        if user_input_chr not in [i for i in '012345678']:
+        if user_input_chr not in [i for i in '0123456789']:
             print("Enter a valid option!")
             take_user_input("press Enter to continue..")
             continue
@@ -268,7 +271,6 @@ def main():
                 #update config.token here
                 update_token(header, payload, signature)
             case 4: # Forge Token
-                print("coming soon")
                 signature = forge_jwt(header, payload)
                 update_token(header, payload, signature)
             case 5: # not verifying
@@ -293,6 +295,9 @@ def main():
             case 8:
                 config.secret_value = take_user_input("Enter the secret value: ")
                 # verify and forge the config.token
+            case 9:
+                #send a custom we request to the URL
+                attacking_url.edit_web_request()
             case 0:
                 print("Good Bye..")
                 exit()

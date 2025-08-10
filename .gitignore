@@ -1,3 +1,5 @@
 jwt.txt
 test.txt
-__pycache__/*
+__pycache__/
+*.pyc
+*.pyo

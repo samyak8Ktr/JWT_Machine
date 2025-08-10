@@ -1,6 +1,7 @@
 import jwt
 import multiprocessing
 import config
+from rich import print
 
 # --- Hardcoded values ---
 #token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJhZG1pbiI6MSwiYXVkIjoiYXBwQiJ9.65p5LcnatdJct3NuuJgI9STNAB3UipZK91sQzU1m1ww"
@@ -37,7 +38,7 @@ def check_the_token(wordlist, result_queue):
 def bruteforce_the_jwt():
 
     number_of_processes = multiprocessing.cpu_count()
-    print(f"Number of CPU cores found: {number_of_processes}")
+    print(f"[+] Number of CPU cores found: {number_of_processes}")
 
     with open(config.wordlist, 'r') as wordlist:
         lines = [line.strip() for line in wordlist.readlines()]
@@ -69,12 +70,12 @@ def bruteforce_the_jwt():
         p.terminate()
         p.join()
 
-    if found:
+    if found is not None:
         config.secret_value = found.strip()
-        print("Secret Found:", config.secret_value)
+        print(f"[green][>] Secret Found: {config.secret_value}[/green]")
         input("press Enter to continue..")
     else:
-        print("Secret not found.")
+        print("[red][-] Secret not found [/red].")
 
 
 # if __name__ == "__main__":
