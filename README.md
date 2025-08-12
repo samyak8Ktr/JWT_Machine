@@ -5,6 +5,8 @@ It streamlines common JWT attack vectors and saves time for security researchers
 
 I am still working on the networking part of this project, particulary dealing with diffrent behavious of web applications and how they accept JWT so that part is still in development.
 
+![JWT Machine Banner](images/interface.png)
+
 ---
 
 ## ⚠️ Warning & Ethical Use
